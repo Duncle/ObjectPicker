@@ -10,9 +10,9 @@ public class UIManager : MonoBehaviour
 
     [Header("Panel")]
     [SerializeField] private Transform listRoot;
-    [SerializeField] private Slider   alphaSlider;
-    [SerializeField] private Button   hideAllBtn;
-    [SerializeField] private Toggle   toggleAll;
+    [SerializeField] private Slider alphaSlider;
+    [SerializeField] private Button hideAllBtn;
+    [SerializeField] private Toggle toggleAll;
 
     private readonly HashSet<RenderableObject> _selection = new();
 
@@ -33,24 +33,22 @@ public class UIManager : MonoBehaviour
         toggleAll.onValueChanged.AddListener(val =>
         {
             foreach (var t in listRoot.GetComponentsInChildren<Toggle>())
-                t.isOn = val;                     // обновляет _selection автоматически
+                t.isOn = val;
         });
     }
-
-    /* ---------- helpers ---------- */
 
     void GenerateList()
     {
         foreach (var obj in GetObjectsInHierarchyOrder())
         {
-            var go     = Instantiate(itemPrefab, listRoot);
+            var go = Instantiate(itemPrefab, listRoot);
             var toggle = go.GetComponentInChildren<Toggle>();
             var eyeBtn = go.transform.Find("EyeButton").GetComponent<Button>();
 
             toggle.onValueChanged.AddListener(isOn =>
             {
                 if (isOn) _selection.Add(obj);
-                else      _selection.Remove(obj);
+                else _selection.Remove(obj);
             });
 
             eyeBtn.onClick.AddListener(obj.ToggleVisibility);
